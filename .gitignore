@@ -1,4 +1,2 @@
 venv
-output/*
-!output/.gitkeep
 .idea
