@@ -20,5 +20,5 @@ Run the script:
 git clone git@github.com:conradkleinespel/github-contributions.git
 cd github-contributions
 pip install requests
-AUTHOR=conradkleinespel OUTPUT_DIR=path/to/output/dir TOKEN=github-token python main.py
+TOKEN=github-token python main.py -o path/to/output/dir github-username
 ```
