@@ -24,9 +24,12 @@ pip install requests
 
 TOKEN=github-token python main.py \
     -o path/to/output/dir \
-    -c commits-list.txt \
-    -i issues-list.txt \
+    -c commits.txt \
+    -i issues.txt \
+    -s 2022-07-22 \
     github-username
 ```
+
+Only pull requests after the date in the `-s` option are downloaded. This helps with updating the backup regularly.
 
 See the [backup of my own contributions](https://github.com/conradkleinespel/github-contributions-backup) for a more concrete example.
