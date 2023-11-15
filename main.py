@@ -79,7 +79,7 @@ def backup_commit(commit_date, commit_url, output_dir):
 
 def get_html_page(url):
     (status, html_output) = getstatusoutput(
-        f"docker run --rm monolith {url} -o - -s"
+        f"docker run -ti --rm --user=1042:1042 --cap-drop=ALL monolith monolith {url} -o - -s"
     )
     assert status == 0
     return html_output
