@@ -39,8 +39,14 @@ def backup_pull(pull, output_dir):
 
     logging.info(f"Fetching pull request: {date} - {organization}/{repo}/{pull_id}")
 
+    conversation_path = f"{output_dir}/pull-requests/{pull_output_path}-conversation.html"
+
+    if os.path.exists(conversation_path):
+        logging.info(f"Skipping, already fetched")
+        return
+
     with \
-            open(f"{output_dir}/pull-requests/{pull_output_path}-conversation.html", "w") as html_conversation_file, \
+            open(conversation_path, "w") as html_conversation_file, \
             open(f"{output_dir}/pull-requests/{pull_output_path}-commits.html", "w") as html_commits_file, \
             open(f"{output_dir}/pull-requests/{pull_output_path}-files.html", "w") as html_files_file, \
             open(f"{output_dir}/pull-requests/{pull_output_path}.diff", "w") as diff_file, \
@@ -58,7 +64,12 @@ def backup_issue(issue_date, issue_url, output_dir):
 
     logging.info(f"Fetching issue: {issue_date} - {organization}/{repo}/{issue_id}")
 
-    with open(f"{output_dir}/issues/{issue_output_path}.html", "w") as html_files_file:
+    html_files_path = f"{output_dir}/issues/{issue_output_path}.html"
+    if os.path.exists(html_files_path):
+        logging.info(f"Skipping, already fetched")
+        return
+
+    with open(html_files_path, "w") as html_files_file:
         html_files_file.write(get_html_page(f"{issue_url}"))
 
 
@@ -68,10 +79,18 @@ def backup_commit(commit_date, commit_url, output_dir):
 
     logging.info(f"Fetching commit: {commit_date} - {organization}/{repo}/{commit_hash}")
 
+    html_files_path = f"{output_dir}/commits/{commit_output_path}-files.html"
+    diff_file_path = f"{output_dir}/commits/{commit_output_path}.diff"
+    patch_file_path = f"{output_dir}/commits/{commit_output_path}.patch"
+
+    if os.path.exists(html_files_path) or os.path.exists(diff_file_path) or os.path.exists(patch_file_path):
+        logging.info(f"Skipping, already fetched")
+        return
+
     with \
-            open(f"{output_dir}/commits/{commit_output_path}-files.html", "w") as html_files_file, \
-            open(f"{output_dir}/commits/{commit_output_path}.diff", "w") as diff_file, \
-            open(f"{output_dir}/commits/{commit_output_path}.patch", "w") as patch_file:
+            open(html_files_path, "w") as html_files_file, \
+            open(diff_file_path, "w") as diff_file, \
+            open(patch_file_path, "w") as patch_file:
         html_files_file.write(get_html_page(f"{commit_url}"))
         diff_file.write(requests.get(f"{commit_url}.diff", allow_redirects=True).text)
         patch_file.write(requests.get(f"{commit_url}.patch", allow_redirects=True).text)
